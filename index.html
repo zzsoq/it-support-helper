@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مساعد الدعم التقني</title>
+<style>
+*	{ box-sizing: border-box; }
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: #f3f6fb;
+color: #202b3c;
+}
+header {
+background: #123b63;
+color: white;
+padding: 24px;
+text-align: center;
+}
+header h1 { margin: 0 0 8px; }
+header p { margin: 0; color: #dce9f7; }
+main {
+max-width: 720px;
+margin: 35px auto;
+padding: 20px;
+}
+.card {
+background: white;
+border-radius: 16px;
+padding: 26px;
+box-shadow: 0 5px 20px #142b4610;
+}
+h2 { margin-top: 0; }
+.problems {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+}
+button {
+font-family: inherit;
+font-size: 16px;
+cursor: pointer;
+border: 0;
+border-radius: 10px;
+padding: 14px;
+}
+.problem {
+background: #f0f5fb;
+color: #173d63;
+border: 1px solid #d8e4f1;
+}
+.problem:hover { background: #dceafa; }
+.primary {
+background: #1769aa;
+color: white;
+}
+.secondary {
+background: #e9eef4;
+color: #24374a;
+}
+.actions {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+margin-top: 24px;
+}
+.steps {
+line-height: 2;
+padding-right: 24px;
+}
+.notice {
+background: #fff6df;
+padding: 14px;
+border-radius: 10px;
+margin-top: 18px;
+}
+.hidden { display: none; }
+footer {
+text-align: center;
+color: #68778a;
+padding: 20px;
+font-size: 13px;
+}
+@media(max-width: 480px) {
+.problems { grid-template-columns: 1fr; }
+main { margin: 12px auto; }
+}
+</style>
+</head>
+<body>
+<header>
+<h1>مساعد الدعم التقني</h1>
+<p>جرّب الحلول البسيطة قبل التواصل مع فريق IT Support</p>
+</header>
+<main>
+<section class="card" id="page1">
+<h2>ما المشكلة التي تواجهك؟</h2>
+<p>اختر المشكلة لعرض خطوات الحل المناسبة.</p>
+<div class="problems">
+<button class="problem" onclick="choose('excel')">📊 مشكلة Excel أو Office</button>
+<button class="problem" onclick="choose('printer')">🖨️ مشكلة الطابعة</button>
+<button class="problem" onclick="choose('network')">🌐 الإنترنت أو الشبكة</button>
+<button class="problem" onclick="choose('login')">🔐 تسجيل الدخول أو كلمة المرور</button>
+<button class="problem" onclick="choose('outlook')">✉️ مشكلة Outlook</button>
+<button class="problem" onclick="choose('other')">💻 مشكلة أخرى بالجهاز</button>
+</div>
+</section>
+<section class="card hidden" id="page2">
+<h2 id="problemTitle"></h2>
+<p>جرّب الخطوات التالية بالترتيب:</p>
+<ol class="steps" id="stepList"></ol>
+<div class="notice">
+إذا كانت المشكلة تتعلق بعطل عام أو ظهرت رسالة خطأ غير معروفة،
+لا تغيّر إعدادات الشركة بنفسك؛ تواصل مع فريق الدعم.
+</div>
+<div class="actions">
+<button class="secondary" onclick="back()">رجوع</button>
+<button class="primary" onclick="solved()">انحلت المشكلة ✓</button>
+<button class="secondary" onclick="notSolved()">ما انحلت</button>
+</div>
+</section>
+<section class="card hidden" id="page3">
+<h2 id="resultTitle">التواصل مع الدعم التقني</h2>
+<p id="resultText">يمكنك تجهيز رسالة لفريق الدعم.</p>
+<label for="employeeName">اسمك (اختياري)</label>
+<input id="employeeName" placeholder="اكتب اسمك"
+style="width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccd6e2;border-radius:8px;">
+<label for="details">تفاصيل المشكلة</label>
+<textarea id="details" rows="4"
+placeholder="اكتب رسالة الخطأ وماذا حدث..."
+style="width:100%;padding:12px;margin:8px 0;border:1px solid #ccd6e2;border-radius:8px;font-family:Arial;resize:vertical;"></textarea>
+<div class="actions">
+<button class="secondary" onclick="backToSteps()">رجوع للحلول</button>
+<button class="primary" onclick="prepareEmail()">تجهيز الإيميل</button>
+<button class="secondary" onclick="restart()">العودة للبداية</button>
+</div>
+<p id="emailNote" class="notice hidden">
+ستُفتح رسالة جديدة في برنامج البريد. راجعها قبل الإرسال.
+</p>
+</section>
+<section class="card hidden" id="pageSuccess">
+<h2>ممتاز! 🎉</h2>
+<p>سعيدون أن المشكلة انحلت. يمكنك العودة للبداية إذا احتجت مساعدة أخرى.</p>
+<button class="primary" onclick="restart()">العودة للبداية</button>
+</section>
+</main>
+<footer>IT Support · Self-Service Helper</footer>
+<script>
+const issues = {
+excel: {
+title: "مشكلة Excel أو Office",
+steps: [
+"احفظ عملك إن أمكن.",
+"أغلق Excel وجميع برامج Office المفتوحة.",
+"افتح Excel مرة أخرى وجرّب الملف.",
+"إذا استمرت المشكلة، أعد تشغيل الجهاز عندما يكون ذلك مناسبًا.",
+"سجّل نص رسالة الخطأ إن ظهرت."
+]
+},
+printer: {
+title: "مشكلة الطابعة",
+steps: [
+"تأكد أن الطابعة تعمل ولا تظهر عليها رسالة خطأ.",
+"تحقق من وجود ورق وعدم وجود انحشار واضح.",
+"تأكد من اختيار الطابعة الصحيحة عند الطباعة.",
+"جرّب طباعة صفحة أخرى.",
+"إذا كانت الطابعة الشبكية لا تستجيب، تواصل مع الدعم."
+]
+},
+network: {
+title: "مشكلة الإنترنت أو الشبكة",
+steps: [
+"تحقق من اتصال Wi-Fi أو كابل الشبكة.",
+"تأكد هل المشكلة عندك فقط أم عند زملائك أيضًا.",
+"افتح موقعًا داخليًا أو موقعًا موثوقًا لاختبار الاتصال.",
+"افصل وأعد توصيل Wi-Fi إذا كان ذلك مسموحًا.",
+"لا تغيّر إعدادات IP أو DNS الخاصة بالشركة بنفسك."
+]
+},
+login: {
+title: "مشكلة تسجيل الدخول",
+steps: [
+"تحقق من كتابة اسم المستخدم بشكل صحيح.",
+"تأكد أن Caps Lock ليس مفعّلًا بالخطأ.",
+"تحقق من اتصال الجهاز بشبكة الشركة إذا كان مطلوبًا.",
+"إذا نسيت كلمة المرور، استخدم طريقة الاستعادة المعتمدة لدى الشركة.",
+"لا تشارك كلمة مرورك مع أي شخص."
+]
+},
+outlook: {
+title: "مشكلة Outlook",
+steps: [
+"تأكد من اتصال الجهاز بالإنترنت.",
+"تحقق هل Outlook يعمل دون اتصال (Work Offline).",
+"أغلق Outlook ثم افتحه مجددًا.",
+"جرّب فتح البريد من طريقة الوصول المعتمدة في الشركة، إن كانت متاحة.",
+"إذا لم تتم مزامنة البريد، سجّل وقت المشكلة وأي رسالة خطأ."
+]
+},
+other: {
+title: "مشكلة أخرى بالجهاز",
+steps: [
+"دوّن ما كنت تفعله عندما ظهرت المشكلة.",
+"احفظ ملفاتك وأغلق البرامج غير الضرورية إن أمكن.",
+"إذا كان الجهاز بطيئًا، تحقق هل توجد برامج كثيرة مفتوحة.",
+"أعد تشغيل الجهاز فقط إذا كان ذلك آمنًا ولا توجد أعمال غير محفوظة.",
+"إذا استمرت المشكلة، جهّز وصفًا مختصرًا للدعم."
+]
+}
+};
+let currentIssue = "";
+function show(id) {
+["page1", "page2", "page3", "pageSuccess"].forEach(page => {
+document.getElementById(page).classList.add("hidden");
+});
+document.getElementById(id).classList.remove("hidden");
+window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function choose(key) {
+currentIssue = key;
+const issue = issues[key];
+document.getElementById("problemTitle").textContent = issue.title;
+const list = document.getElementById("stepList");
+list.innerHTML = "";
+issue.steps.forEach(step => {
+const li = document.createElement("li");
+li.textContent = step;
+list.appendChild(li);
+});
+show("page2");
+}
+function back() {
+show("page1");
+}
+function solved() {
+show("pageSuccess");
+}
+function notSolved() {
+document.getElementById("resultTitle").textContent = "لم تُحل المشكلة";
+document.getElementById("resultText").textContent =
+"أكمل التفاصيل التالية لتجهيز رسالة إلى فريق IT Support.";
+document.getElementById("details").value =
+"نوع المشكلة: " + issues[currentIssue].title +
+"
+الخطوات التي جربتها:
+";
+document.getElementById("emailNote").classList.add("hidden");
+show("page3");
+}
+function backToSteps() {
+show("page2");
+}
+function prepareEmail() {
+const name = document.getElementById("employeeName").value.trim();
+const details = document.getElementById("details").value.trim();
+const subject = "طلب دعم تقني - " +
+(issues[currentIssue]?.title || "مشكلة تقنية");
+const body =
+(name ? "اسم الموظف: " + name + "
+" : "") +
+"نوع المشكلة: " + (issues[currentIssue]?.title || "مشكلة تقنية") +
+"
+التفاصيل:
+" + details;
+// استبدلي العنوان أدناه بعنوان IT Support الفعلي
+const supportEmail = "IT_SUPPORT_EMAIL_HERE";
+if (supportEmail === "IT_SUPPORT_EMAIL_HERE") {
+document.getElementById("details").value =
+"الموضوع: " + subject + "
+" + body +
+"
+ملاحظة: أضيفي عنوان IT Support قبل إرسال الرسالة.";
+document.getElementById("emailNote").textContent =
+"قبل الاستخدام، استبدلي IT_SUPPORT_EMAIL_HERE في الكود بعنوان الدعم الفعلي.";
+document.getElementById("emailNote").classList.remove("hidden");
+return;
+}
+window.location.href =
+"mailto:" + supportEmail +
+"?subject=" + encodeURIComponent(subject) +
+"&body=" + encodeURIComponent(body);
+}
+function restart() {
+currentIssue = "";
+document.getElementById("employeeName").value = "";
+document.getElementById("details").value = "";
+show("page1");
+}
+</script>
+</body>
+</html>
