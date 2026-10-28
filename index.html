@@ -306,10 +306,10 @@ function prepareEmail() {
     "نوع المشكلة: " + (issues[currentIssue]?.title || "مشكلة تقنية") +
     "\n\nالتفاصيل:\n" + details;
 
-  // استبدلي العنوان أدناه بعنوان IT Support الفعلي
-  const supportEmail = "IT_SUPPORT_EMAIL_HERE";
+  // عنوان الايميل 
+  const supportEmail = "itsupport@irsaa.com";
 
-  if (supportEmail === "IT_SUPPORT_EMAIL_HERE") {
+  if (supportEmail === "") {
     document.getElementById("details").value =
       "الموضوع: " + subject + "\n\n" + body +
       "\n\nملاحظة: أضيفي عنوان IT Support قبل إرسال الرسالة.";
