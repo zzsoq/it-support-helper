@@ -1,1 +1,34 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:type="MailApp">
+  <Id>7b2d8c41-92a4-4a7f-a861-19d72f3c4e10</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>IT Support Helper</ProviderName>
+  <DefaultLocale>ar-SA</DefaultLocale>
+  <DisplayName DefaultValue="IT Support Helper"/>
+  <Description DefaultValue="مساعد الدعم الفني قبل إرسال البريد"/>
+  <IconUrl DefaultValue="https://zzsoq.github.io/it-support-helper/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://zzsoq.github.io/it-support-helper/icon-128.png"/>
+  <SupportUrl DefaultValue="https://zzsoq.github.io/it-support-helper/"/>
+  <AppDomains>
+    <AppDomain>zzsoq.github.io</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.8"/>
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://zzsoq.github.io/it-support-helper/taskpane.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+</OfficeApp>
