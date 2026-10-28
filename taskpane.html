@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مساعد الدعم الفني</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      color: #242424;
+      background: #f7f5f0;
+    }
+    h2 { color: #735d28; }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      border: 1px solid #ddd;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border: 0;
+      border-radius: 8px;
+      background: #735d28;
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    #result { white-space: pre-line; line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <h2>مساعد الدعم الفني</h2>
+  <p>جرّبي الحلول التالية قبل إرسال طلب الدعم.</p>
 
+  <div class="card">
+    <strong>اختاري نوع المشكلة</strong>
+    <button onclick="showHelp('office')">مشاكل Office وExcel</button>
+    <button onclick="showHelp('network')">الإنترنت والشبكة</button>
+    <button onclick="showHelp('printer')">الطابعة</button>
+    <button onclick="showHelp('login')">تسجيل الدخول وكلمة المرور</button>
+    <button onclick="showHelp('outlook')">مشاكل Outlook</button>
+  </div>
+
+  <div class="card" id="result">
+    اختاري المشكلة لعرض خطوات التشخيص.
+  </div>
+
+  <script src="taskpane.js"></script>
+</body>
+</html>
